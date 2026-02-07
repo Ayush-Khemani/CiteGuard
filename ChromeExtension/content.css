@@ -1,0 +1,59 @@
+/* CiteGuard Content Script Styles */
+/* These styles are injected into all web pages */
+
+/* Floating button styles */
+#citeguard-floating-btn {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Notification styles */
+#citeguard-notification {
+    animation: notificationSlideIn 0.3s ease-out;
+}
+
+@keyframes notificationSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(400px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Tooltip for highlighted text */
+.citeguard-tooltip {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    position: absolute;
+    z-index: 10002;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+/* Highlighted suspicious content */
+.citeguard-highlighted {
+    background-color: rgba(255, 193, 7, 0.3);
+    border-bottom: 2px dashed #ffc107;
+    cursor: help;
+    transition: background-color 0.2s;
+}
+
+.citeguard-highlighted:hover {
+    background-color: rgba(255, 193, 7, 0.5);
+}

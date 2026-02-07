@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CiteGuard - Plagiarism Detection</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">📋 CiteGuard</div>
+            <ul class="nav-links">
+                <li><a href="#analyze">Analyze</a></li>
+                <li><a href="#paraphrase">Paraphrase</a></li>
+                <li><a href="#citation">Citation</a></li>
+                <li><a href="https://localhost:8000/docs" target="_blank">API Docs</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>CiteGuard - Academic Plagiarism Detector</h1>
+            <p>Detect plagiarism, generate citations, and paraphrase text with AI</p>
+        </header>
+
+        <!-- Tab Navigation -->
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('analyze')">📊 Plagiarism Analysis</button>
+            <button class="tab-button" onclick="switchTab('documents')">📁 Documents</button>
+            <button class="tab-button" onclick="switchTab('paraphrase')">✏️ Paraphrase</button>
+            <button class="tab-button" onclick="switchTab('citation')">📚 Citation Generator</button>
+        </div>
+
+        <!-- Plagiarism Analysis Tab -->
+        <div id="analyze" class="tab-content active">
+            <div class="card">
+                <h2>Plagiarism Detection</h2>
+                <p class="description">Paste your text to check for plagiarism. The system analyzes semantic similarity and returns a confidence score.</p>
+                
+                <div class="form-group">
+                    <label for="analyzeText">Enter Text to Analyze:</label>
+                    <textarea id="analyzeText" placeholder="Paste your text here..." rows="10"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="threshold">Similarity Threshold (0-1):</label>
+                    <input type="number" id="threshold" min="0" max="1" step="0.1" value="0.7">
+                    <small>Lower = more sensitive. 0.7 = 70% similarity threshold</small>
+                </div>
+
+                <button class="btn btn-primary" onclick="analyzeText()">
+                    <span id="analyzeBtn">Analyze Text</span>
+                </button>
+
+                <!-- Results -->
+                <div id="analyzeResults" class="results hidden">
+                    <h3>Analysis Results</h3>
+                    
+                    <div class="result-item">
+                        <label>Plagiarism Score:</label>
+                        <div class="score-display">
+                            <div class="score-bar">
+                                <div id="scoreBar" class="score-fill"></div>
+                            </div>
+                            <span id="scorePercent">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="result-item">
+                        <label>Status:</label>
+                        <span id="plagiarismStatus" class="status-badge"></span>
+                    </div>
+
+                    <div class="result-item">
+                        <label>Flagged Sections:</label>
+                        <span id="flaggedCount">0</span> suspicious sections detected
+                    </div>
+
+                    <div class="result-item">
+                        <label>Recommendations:</label>
+                        <ul id="recommendations"></ul>
+                    </div>
+
+                    <div class="result-item">
+                        <label>Processing Time:</label>
+                        <span id="processingTime">0ms</span>
+                    </div>
+                </div>
+
+                <div id="analyzeError" class="error hidden"></div>
+            </div>
+        </div>
+
+        <!-- Documents Tab - Upload and Manage Sources -->
+        <div id="documents" class="tab-content">
+            <div class="card">
+                <h2>📁 Manage Internal Sources</h2>
+                <p>Upload documents to check plagiarism against. When analyzing text, it will compare against these stored documents.</p>
+                
+                <div class="form-group">
+                    <label for="docTitle">Document Title:</label>
+                    <input type="text" id="docTitle" placeholder="e.g., Research Paper 1" maxlength="500">
+                </div>
+
+                <div class="form-group">
+                    <label for="docContent">Document Content:</label>
+                    <textarea id="docContent" placeholder="Paste or paste the full document text..." rows="8"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="docSource">Source URL (optional):</label>
+                    <input type="url" id="docSource" placeholder="https://example.com">
+                </div>
+
+                <button class="btn btn-primary" onclick="uploadDocument()">
+                    <span id="uploadBtn">📤 Upload Document</span>
+                </button>
+
+                <div id="uploadError" class="error hidden"></div>
+                <div id="uploadSuccess" class="success hidden"></div>
+
+                <hr style="margin: 20px 0;">
+
+                <h3>Stored Documents</h3>
+                <div id="documentsList" class="documents-list">
+                    <p style="color: #999; text-align: center; padding: 20px;">No documents uploaded yet</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paraphrase Tab -->
+        <div id="paraphrase" class="tab-content">
+            <div class="card">
+                <h2>AI Paraphrasing</h2>
+                <p class="description">Rewrite your text in different styles to avoid plagiarism while maintaining meaning.</p>
+                
+                <div class="form-group">
+                    <label for="paraText">Text to Paraphrase:</label>
+                    <textarea id="paraText" placeholder="Paste text here..." rows="8"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="paraStyle">Paraphrase Style:</label>
+                    <select id="paraStyle">
+                        <option value="simple">Simple & Clear</option>
+                        <option value="academic">Academic</option>
+                        <option value="formal">Formal</option>
+                        <option value="casual">Casual</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-primary" onclick="paraphraseText()">
+                    <span id="paraBtn">Paraphrase</span>
+                </button>
+
+                <div id="paraResults" class="results hidden">
+                    <h3>Paraphrased Text</h3>
+                    <textarea id="paraOutput" readonly rows="8"></textarea>
+                    <button class="btn btn-secondary" onclick="copyToClipboard('paraOutput')">📋 Copy to Clipboard</button>
+                </div>
+
+                <div id="paraError" class="error hidden"></div>
+            </div>
+        </div>
+
+        <!-- Citation Tab -->
+        <div id="citation" class="tab-content">
+            <div class="card">
+                <h2>Citation Generator</h2>
+                <p class="description">Generate properly formatted citations in multiple academic styles.</p>
+                
+                <div class="form-group">
+                    <label for="citationTitle">Title:</label>
+                    <input type="text" id="citationTitle" placeholder="Paper or source title">
+                </div>
+
+                <div class="form-group">
+                    <label for="citationAuthors">Authors (comma-separated):</label>
+                    <input type="text" id="citationAuthors" placeholder="John Doe, Jane Smith">
+                </div>
+
+                <div class="form-group">
+                    <label for="citationYear">Publication Year:</label>
+                    <input type="number" id="citationYear" min="1900" max="2100" value="2024">
+                </div>
+
+                <div class="form-group">
+                    <label for="citationStyle">Citation Style:</label>
+                    <select id="citationStyle">
+                        <option value="apa">APA</option>
+                        <option value="mla">MLA</option>
+                        <option value="chicago">Chicago</option>
+                        <option value="harvard">Harvard</option>
+                        <option value="ieee">IEEE</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-primary" onclick="generateCitation()">
+                    <span id="citationBtn">Generate Citation</span>
+                </button>
+
+                <div id="citationResults" class="results hidden">
+                    <h3>Generated Citation</h3>
+                    <div id="citationOutput" class="citation-box"></div>
+                    <button class="btn btn-secondary" onclick="copyCitation()">📋 Copy Citation</button>
+                </div>
+
+                <div id="citationError" class="error hidden"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>CiteGuard © 2024 | Powered by FastAPI & AI</p>
+    </footer>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

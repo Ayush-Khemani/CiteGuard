@@ -1,0 +1,40 @@
+{
+  "manifest_version": 3,
+  "name": "CiteGuard - Plagiarism Detector",
+  "version": "1.0.0",
+  "description": "Detect plagiarism in web content and generate academic citations",
+  "icons": {
+    "16": "images/icon-16.png",
+    "48": "images/icon-48.png",
+    "128": "images/icon-128.png"
+  },
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "readingList"
+  ],
+  "host_permissions": [
+    "http://localhost:8000/*",
+    "https://localhost:8000/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "CiteGuard"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["content.css"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["content.js"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

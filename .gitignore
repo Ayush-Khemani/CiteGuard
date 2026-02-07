@@ -1,0 +1,88 @@
+# Git ignore patterns for CiteGuard
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+postgres_data/
+redis_data/
+
+# Cache
+.cache/
+.pytest_cache/
+.mypy_cache/
+.hypothesis/
+htmlcov/
+
+# Logs
+*.log
+logs/
+
+# Dependencies
+node_modules/
+.npm
+
+# Build outputs
+/dist
+/build
+/coverage
+
+# ML Models
+*.bin
+*.pt
+*.pth
+*.h5
+model_cache/
+
+# Docker
+.dockerignore
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Misc
+*.bak
+.project
+.pydevproject
